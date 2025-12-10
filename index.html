@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gutschein</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+        #play-button {
+            padding: clamp(15px, 4vw, 30px) clamp(25px, 6vw, 50px);
+            font-size: clamp(16px, 4vw, 24px);
+            background-color: #ffffff;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        #play-button:hover {
+            background-color: #ff4500;
+            color: #fff;
+            transform: scale(1.1);
+        }
+        #animation-container {
+            display: none;
+            position: relative;
+            width: 500px;
+            height: 250px;
+        }
+        #animation-container.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .cats-container {
+            display: flex;
+            gap: 100px;
+            align-items: flex-end;
+            position: relative;
+        }
+        .cat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: catBounce 2s ease-in-out infinite;
+        }
+        .cat-large {
+            animation-delay: 0s;
+        }
+        .cat-small {
+            animation-delay: 0.3s;
+        }
+        @keyframes catBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        /* Linke Katze (rot-weiß, schaut nach rechts) */
+        .cat-left {
+            position: relative;
+        }
+        .cat-left .cat-head {
+            width: 90px;
+            height: 80px;
+            background: repeating-linear-gradient(
+                0deg,
+                #ff8c42 0px,
+                #ff8c42 12px,
+                #fff 12px,
+                #fff 24px
+            );
+            border-radius: 60% 40% 40% 60%;
+            position: relative;
+        }
+        .cat-left .ear {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 0px solid transparent;
+            border-bottom: 30px solid #ff8c42;
+            top: -20px;
+            right: 15px;
+            transform: rotate(20deg);
+        }
+        .cat-left .eye {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #000;
+            border-radius: 50%;
+            right: 20px;
+            top: 30px;
+        }
+        .cat-left .nose {
+            position: absolute;
+            width: 8px;
+            height: 6px;
+            background-color: #ff1744;
+            border-radius: 0 0 50% 50%;
+            right: 15px;
+            top: 50px;
+        }
+        .cat-left .whiskers {
+            position: absolute;
+            right: 10px;
+            top: 52px;
+        }
+        .cat-left .whisker {
+            position: absolute;
+            width: 30px;
+            height: 1px;
+            background-color: #333;
+            right: 0;
+        }
+        .cat-left .whisker:nth-child(1) {
+            transform: rotate(-15deg);
+            top: -5px;
+        }
+        .cat-left .whisker:nth-child(2) {
+            top: 0px;
+        }
+        .cat-left .whisker:nth-child(3) {
+            transform: rotate(15deg);
+            top: 5px;
+        }
+        .cat-left .cat-body {
+            width: 70px;
+            height: 90px;
+            background: repeating-linear-gradient(
+                0deg,
+                #ff8c42 0px,
+                #ff8c42 12px,
+                #fff 12px,
+                #fff 24px
+            );
+            border-radius: 40% 40% 50% 50%;
+            margin-top: -5px;
+        }
+        /* Rechte Katze (grau-weiß, schaut nach links) */
+        .cat-right {
+            position: relative;
+        }
+        .cat-right .cat-head {
+            width: 75px;
+            height: 70px;
+            background: repeating-linear-gradient(
+                0deg,
+                #888 0px,
+                #888 10px,
+                #fff 10px,
+                #fff 20px
+            );
+            border-radius: 40% 60% 60% 40%;
+            position: relative;
+        }
+        .cat-right .ear {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-right: 18px solid transparent;
+            border-left: 0px solid transparent;
+            border-bottom: 25px solid #888;
+            top: -18px;
+            left: 12px;
+            transform: rotate(-20deg);
+        }
+        .cat-right .eye {
+            position: absolute;
+            width: 9px;
+            height: 9px;
+            background-color: #000;
+            border-radius: 50%;
+            left: 18px;
+            top: 28px;
+        }
+        .cat-right .nose {
+            position: absolute;
+            width: 7px;
+            height: 5px;
+            background-color: #ff1744;
+            border-radius: 0 0 50% 50%;
+            left: 15px;
+            top: 45px;
+        }
+        .cat-right .whiskers {
+            position: absolute;
+            left: 10px;
+            top: 47px;
+        }
+        .cat-right .whisker {
+            position: absolute;
+            width: 28px;
+            height: 1px;
+            background-color: #333;
+            left: 0;
+        }
+        .cat-right .whisker:nth-child(1) {
+            transform: rotate(15deg);
+            top: -5px;
+        }
+        .cat-right .whisker:nth-child(2) {
+            top: 0px;
+        }
+        .cat-right .whisker:nth-child(3) {
+            transform: rotate(-15deg);
+            top: 5px;
+        }
+        .cat-right .cat-body {
+            width: 60px;
+            height: 80px;
+            background: repeating-linear-gradient(
+                0deg,
+                #888 0px,
+                #888 10px,
+                #fff 10px,
+                #fff 20px
+            );
+            border-radius: 40% 40% 50% 50%;
+            margin-top: -5px;
+        }
+        /* Herz */
+        .heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            color: #ff1744;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        @keyframes heartbeat {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1); 
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.2); 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="play-button">Klicke hier um einen Gutschein zu erhalten</button>
+        <div id="animation-container">
+            <div class="cats-container">
+                <div class="cat cat-large cat-left">
+                    <div class="cat-head">
+                        <div class="ear"></div>
+                        <div class="eye"></div>
+                        <div class="nose"></div>
+                        <div class="whiskers">
+                            <div class="whisker"></div>
+                            <div class="whisker"></div>
+                            <div class="whisker"></div>
+                        </div>
+                    </div>
+                    <div class="cat-body"></div>
+                </div>
+                <div class="cat cat-small cat-right">
+                    <div class="cat-head">
+                        <div class="ear"></div>
+                        <div class="eye"></div>
+                        <div class="nose"></div>
+                        <div class="whiskers">
+                            <div class="whisker"></div>
+                            <div class="whisker"></div>
+                            <div class="whisker"></div>
+                        </div>
+                    </div>
+                    <div class="cat-body"></div>
+                </div>
+            </div>
+            <div class="heart">❤</div>
+        </div>
+    </div>
+    <audio id="reality-audio" src="audio/gutschein.wav"></audio>
+    <script>
+        const button = document.getElementById('play-button');
+        const audio = document.getElementById('reality-audio');
+        const animationContainer = document.getElementById('animation-container');
+        
+        button.addEventListener('click', () => {
+            if(audio.paused) {
+                audio.play().catch(err => console.log("Autoplay blockiert:", err));
+                button.textContent = "▶ Du hast dir eben einen Gutschein verdient";
+                animationContainer.classList.add('show');
+            } else {
+                audio.pause();
+                button.textContent = "Klicke hier um den Gutschein zu erhalten";
+                animationContainer.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
